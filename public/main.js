@@ -51,7 +51,7 @@ form.addEventListener("submit", (event) => {
   form.reset();
   fields.forEach((field) => field.closest(".field").classList.remove("invalid"));
   showStatus(
-    "Thank you. Your request is recorded on this page. Add a destination email when you are ready to receive enquiries.",
+    "Received. This page does not email anyone yet — once a mailbox is connected, notes like this will reach Bovet directly.",
     "success"
   );
 });
