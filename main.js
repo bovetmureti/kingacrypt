@@ -36,7 +36,9 @@ form.addEventListener("submit", (event) => {
   });
 
   const email = form.elements.email.value.trim();
-  if (email && !/^[\^\s@]+@[\^\s@]+\.[\^\s@]+$/.test(email)) {
+  const at = email.indexOf("@");
+  const dot = email.lastIndexOf(".");
+  if (email && (at < 1 || dot <= at + 1 || dot === email.length - 1)) {
     form.elements.email.closest(".field").classList.add("invalid");
     valid = false;
   }
