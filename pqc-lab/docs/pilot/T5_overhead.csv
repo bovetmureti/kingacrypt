@@ -1,0 +1,10 @@
+use_case,name,pqc,classical,metric,unit,M_pqc,M_classical,rho
+U1,Key establishment (TLS-style ephemeral exchange),ML-KEM-768,X25519,latency (sum of median),us,481.56999999999994,260.07000000000005,1.8516937747529505
+U1,Key establishment (TLS-style ephemeral exchange),ML-KEM-768,X25519,bytes on wire,B,2272.0,64.0,35.5
+U1,Key establishment (TLS-style ephemeral exchange),ML-KEM-768,X25519,incremental peak RSS,KiB,484.0,640.0,0.75625
+U2,Document / transaction signing (1 KiB message),ML-DSA-65,ECDSA-P256,latency (sum of median),us,1743.73,138.48,12.591926632004622
+U2,Document / transaction signing (1 KiB message),ML-DSA-65,ECDSA-P256,bytes on wire,B,3309.0,72.0,45.958333333333336
+U2,Document / transaction signing (1 KiB message),ML-DSA-65,ECDSA-P256,incremental peak RSS,KiB,1315.2,1979.2,0.6645109135004043
+U3,Certificate-style authentication (public key + signature carried),ML-DSA-44,RSA-2048-PSS,latency (sum of median),us,208.17999999999998,39.12,5.321574642126789
+U3,Certificate-style authentication (public key + signature carried),ML-DSA-44,RSA-2048-PSS,bytes on wire,B,3732.0,526.0,7.095057034220532
+U3,Certificate-style authentication (public key + signature carried),ML-DSA-44,RSA-2048-PSS,incremental peak RSS,KiB,1238.4,1780.0,0.6957303370786517

@@ -1,0 +1,28 @@
+\begin{table}[ht]
+\centering
+\caption{M3--M7 encoded object sizes, bytes (Protocol KC-LAB-PQC-2026-v1, session 20261118T092240Z-sandbox).}
+\label{tab:t3}
+\small
+\begin{tabular}{@{}llrrrrrrrr@{}}
+\toprule
+algorithm & iut & nist\_category & public\_key\_B & secret\_key\_B & secret\_key\_fips\_B & ciphertext\_B & shared\_secret\_B & signature\_B & wire\_B \\
+\midrule
+ECDH-P256 & openssl & 1 & 65 & 32 & 32 & 65 & 32 & -- & 130 \\
+ECDH-P384 & openssl & 3 & 97 & 48 & 48 & 97 & 48 & -- & 194 \\
+ECDSA-P256 & openssl & 1 & 65 & 32 & 32 & -- & -- & 72 & 137 \\
+ECDSA-P384 & openssl & 3 & 97 & 48 & 48 & -- & -- & 104 & 201 \\
+Ed25519 & openssl & 1 & 32 & 32 & 32 & -- & -- & 64 & 96 \\
+ML-DSA-44 & openssl & 2 & 1,312 & 32 & 2,560 & -- & -- & 2,420 & 3,732 \\
+ML-DSA-65 & openssl & 3 & 1,952 & 32 & 4,032 & -- & -- & 3,309 & 5,261 \\
+ML-DSA-87 & openssl & 5 & 2,592 & 32 & 4,896 & -- & -- & 4,627 & 7,219 \\
+ML-KEM-1024 & openssl & 5 & 1,568 & 64 & 3,168 & 1,568 & 32 & -- & 3,136 \\
+ML-KEM-512 & pqcrypto & 1 & 800 & 1,632 & 1,632 & 768 & 32 & -- & 1,568 \\
+ML-KEM-768 & openssl & 3 & 1,184 & 64 & 2,400 & 1,088 & 32 & -- & 2,272 \\
+RSA-2048-OAEP & openssl & -- & 270 & 1,193 & 1,193 & 256 & 32 & -- & 526 \\
+RSA-2048-PSS & openssl & -- & 270 & 1,193 & 1,193 & -- & -- & 256 & 526 \\
+RSA-3072-OAEP & openssl & -- & 398 & 1,769 & 1,769 & 384 & 32 & -- & 782 \\
+RSA-3072-PSS & openssl & -- & 398 & 1,769 & 1,769 & -- & -- & 384 & 782 \\
+X25519 & openssl & 1 & 32 & 32 & 32 & 32 & 32 & -- & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,76 @@
+\begin{table}[ht]
+\centering
+\caption{M1 latency in $\mu$s (Protocol KC-LAB-PQC-2026-v1, session 20261118T092240Z-sandbox).}
+\label{tab:t1}
+\small
+\begin{tabular}{@{}lllrrrrrrr@{}}
+\toprule
+algorithm & iut & operation & msg\_len & R & N & mean\_us & sd\_us & median\_us & p95\_us \\
+\midrule
+ECDH-P256 & openssl & Decaps & 0 & 5 & 1000 & 107.1 & 5.6 & 91.4 & 173.5 \\
+ECDH-P256 & openssl & Encaps & 0 & 5 & 1000 & 136.4 & 5.3 & 114.7 & 239.5 \\
+ECDH-P256 & openssl & KeyGen & 0 & 5 & 1000 & 39.5 & 4.0 & 31.7 & 69.3 \\
+ECDH-P384 & openssl & Decaps & 0 & 5 & 1000 & 2,546.0 & 1,047.3 & 2,096.5 & 5,039.5 \\
+ECDH-P384 & openssl & Encaps & 0 & 5 & 1000 & 5,280.8 & 2,132.9 & 4,419.5 & 10,190.5 \\
+ECDH-P384 & openssl & KeyGen & 0 & 5 & 1000 & 2,466.4 & 730.6 & 1,987.3 & 4,529.7 \\
+ECDSA-P256 & openssl & KeyGen & 0 & 5 & 1000 & 42.6 & 2.7 & 33.9 & 66.8 \\
+ECDSA-P256 & openssl & Sign & 32 & 5 & 1000 & 52.9 & 1.2 & 41.9 & 88.5 \\
+ECDSA-P256 & openssl & Sign & 1024 & 5 & 1000 & 54.2 & 1.3 & 44.0 & 89.4 \\
+ECDSA-P256 & openssl & Verify & 32 & 5 & 1000 & 111.6 & 2.8 & 91.9 & 180.2 \\
+ECDSA-P256 & openssl & Verify & 1024 & 5 & 1000 & 118.1 & 2.5 & 94.5 & 192.6 \\
+ECDSA-P384 & openssl & KeyGen & 0 & 5 & 1000 & 1,587.7 & 192.1 & 1,339.9 & 2,758.7 \\
+ECDSA-P384 & openssl & Sign & 32 & 5 & 1000 & 1,690.6 & 200.8 & 1,382.5 & 3,082.6 \\
+ECDSA-P384 & openssl & Sign & 1024 & 5 & 1000 & 1,672.7 & 307.9 & 1,509.9 & 3,032.5 \\
+ECDSA-P384 & openssl & Verify & 32 & 5 & 1000 & 1,530.8 & 517.6 & 1,249.7 & 3,225.1 \\
+ECDSA-P384 & openssl & Verify & 1024 & 5 & 1000 & 1,298.4 & 101.5 & 1,077.7 & 2,387.5 \\
+Ed25519 & openssl & KeyGen & 0 & 5 & 1000 & 71.4 & 5.5 & 55.4 & 112.1 \\
+Ed25519 & openssl & Sign & 32 & 5 & 1000 & 62.5 & 1.6 & 50.1 & 93.8 \\
+Ed25519 & openssl & Sign & 1024 & 5 & 1000 & 68.6 & 4.5 & 54.3 & 101.7 \\
+Ed25519 & openssl & Verify & 32 & 5 & 1000 & 171.0 & 1.9 & 138.6 & 259.2 \\
+Ed25519 & openssl & Verify & 1024 & 5 & 1000 & 174.8 & 6.7 & 141.2 & 269.1 \\
+ML-DSA-44 & openssl & KeyGen & 0 & 5 & 1000 & 228.1 & 15.4 & 193.2 & 355.9 \\
+ML-DSA-44 & openssl & Sign & 32 & 5 & 1000 & 1,230.6 & 114.7 & 954.2 & 3,008.0 \\
+ML-DSA-44 & openssl & Sign & 1024 & 5 & 1000 & 1,236.9 & 172.0 & 902.4 & 2,890.9 \\
+ML-DSA-44 & openssl & Verify & 32 & 5 & 1000 & 275.3 & 62.4 & 208.2 & 395.9 \\
+ML-DSA-44 & openssl & Verify & 1024 & 5 & 1000 & 229.2 & 10.3 & 203.7 & 350.2 \\
+ML-DSA-65 & openssl & KeyGen & 0 & 5 & 1000 & 369.2 & 9.7 & 330.4 & 556.3 \\
+ML-DSA-65 & openssl & Sign & 32 & 5 & 1000 & 1,784.2 & 92.2 & 1,364.7 & 4,406.9 \\
+ML-DSA-65 & openssl & Sign & 1024 & 5 & 1000 & 1,834.1 & 79.1 & 1,424.0 & 4,502.6 \\
+ML-DSA-65 & openssl & Verify & 32 & 5 & 1000 & 330.0 & 6.9 & 296.1 & 481.8 \\
+ML-DSA-65 & openssl & Verify & 1024 & 5 & 1000 & 388.9 & 61.1 & 319.7 & 592.8 \\
+ML-DSA-87 & openssl & KeyGen & 0 & 5 & 1000 & 578.5 & 148.6 & 490.4 & 928.6 \\
+ML-DSA-87 & openssl & Sign & 32 & 5 & 1000 & 2,237.4 & 314.8 & 1,702.2 & 5,115.8 \\
+ML-DSA-87 & openssl & Sign & 1024 & 5 & 1000 & 2,173.7 & 177.5 & 1,691.5 & 5,050.4 \\
+ML-DSA-87 & openssl & Verify & 32 & 5 & 1000 & 538.5 & 40.7 & 487.4 & 808.2 \\
+ML-DSA-87 & openssl & Verify & 1024 & 5 & 1000 & 585.9 & 137.9 & 499.0 & 995.1 \\
+ML-KEM-1024 & openssl & Decaps & 0 & 5 & 1000 & 155.8 & 12.4 & 131.6 & 224.7 \\
+ML-KEM-1024 & openssl & Encaps & 0 & 5 & 1000 & 106.9 & 2.9 & 90.4 & 166.6 \\
+ML-KEM-1024 & openssl & KeyGen & 0 & 5 & 1000 & 484.2 & 43.0 & 425.9 & 745.2 \\
+ML-KEM-512 & pqcrypto & Decaps & 0 & 5 & 1000 & 111.6 & 6.3 & 92.8 & 169.6 \\
+ML-KEM-512 & pqcrypto & Encaps & 0 & 5 & 1000 & 83.4 & 7.2 & 69.7 & 126.2 \\
+ML-KEM-512 & pqcrypto & KeyGen & 0 & 5 & 1000 & 70.0 & 3.3 & 57.3 & 101.0 \\
+ML-KEM-768 & openssl & Decaps & 0 & 5 & 1000 & 120.5 & 4.9 & 99.8 & 178.7 \\
+ML-KEM-768 & openssl & Encaps & 0 & 5 & 1000 & 100.3 & 37.0 & 75.8 & 128.5 \\
+ML-KEM-768 & openssl & KeyGen & 0 & 5 & 1000 & 368.6 & 18.2 & 306.1 & 578.9 \\
+RSA-2048-OAEP & openssl & Decaps & 0 & 5 & 1000 & 938.1 & 139.1 & 783.5 & 1,598.5 \\
+RSA-2048-OAEP & openssl & Encaps & 0 & 5 & 1000 & 51.2 & 12.3 & 45.0 & 84.0 \\
+RSA-2048-OAEP & openssl & KeyGen & 0 & 5 & 100 & 74,307.3 & 18,260.3 & 65,083.2 & 162,606.5 \\
+RSA-2048-PSS & openssl & KeyGen & 0 & 5 & 100 & 75,653.1 & 5,323.5 & 64,266.4 & 163,099.1 \\
+RSA-2048-PSS & openssl & Sign & 32 & 5 & 1000 & 895.0 & 19.0 & 751.7 & 1,536.9 \\
+RSA-2048-PSS & openssl & Sign & 1024 & 5 & 1000 & 900.5 & 14.9 & 754.7 & 1,539.9 \\
+RSA-2048-PSS & openssl & Verify & 32 & 5 & 1000 & 47.5 & 1.7 & 39.1 & 74.2 \\
+RSA-2048-PSS & openssl & Verify & 1024 & 5 & 1000 & 52.6 & 3.3 & 41.6 & 84.6 \\
+RSA-3072-OAEP & openssl & Decaps & 0 & 5 & 1000 & 3,411.6 & 1,919.8 & 2,822.6 & 6,327.6 \\
+RSA-3072-OAEP & openssl & Encaps & 0 & 5 & 1000 & 81.3 & 9.8 & 62.1 & 138.1 \\
+RSA-3072-OAEP & openssl & KeyGen & 0 & 5 & 100 & 266,961.9 & 13,125.2 & 233,043.3 & 564,339.6 \\
+RSA-3072-PSS & openssl & KeyGen & 0 & 5 & 100 & 272,438.2 & 35,410.0 & 220,419.6 & 586,599.3 \\
+RSA-3072-PSS & openssl & Sign & 32 & 5 & 1000 & 2,517.2 & 110.3 & 2,261.1 & 3,754.8 \\
+RSA-3072-PSS & openssl & Sign & 1024 & 5 & 1000 & 2,537.3 & 123.7 & 2,261.5 & 3,869.5 \\
+RSA-3072-PSS & openssl & Verify & 32 & 5 & 1000 & 74.0 & 2.8 & 62.4 & 120.7 \\
+RSA-3072-PSS & openssl & Verify & 1024 & 5 & 1000 & 79.6 & 7.7 & 65.6 & 124.9 \\
+X25519 & openssl & Decaps & 0 & 5 & 1000 & 84.6 & 35.7 & 66.1 & 145.2 \\
+X25519 & openssl & Encaps & 0 & 5 & 1000 & 203.2 & 108.8 & 128.2 & 345.4 \\
+X25519 & openssl & KeyGen & 0 & 5 & 1000 & 111.8 & 108.1 & 65.8 & 141.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
