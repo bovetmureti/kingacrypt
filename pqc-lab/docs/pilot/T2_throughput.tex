@@ -1,0 +1,76 @@
+\begin{table}[ht]
+\centering
+\caption{M2 single-thread throughput, ops/s (Protocol KC-LAB-PQC-2026-v1, session 20261118T092240Z-sandbox).}
+\label{tab:t2}
+\small
+\begin{tabular}{@{}lllrr@{}}
+\toprule
+algorithm & iut & operation & msg\_len & throughput\_ops\_s \\
+\midrule
+ECDH-P256 & openssl & Decaps & 0 & 9,340 \\
+ECDH-P256 & openssl & Encaps & 0 & 7,329 \\
+ECDH-P256 & openssl & KeyGen & 0 & 25,286 \\
+ECDH-P384 & openssl & Decaps & 0 & 393 \\
+ECDH-P384 & openssl & Encaps & 0 & 189 \\
+ECDH-P384 & openssl & KeyGen & 0 & 405 \\
+ECDSA-P256 & openssl & KeyGen & 0 & 23,477 \\
+ECDSA-P256 & openssl & Sign & 32 & 18,886 \\
+ECDSA-P256 & openssl & Sign & 1024 & 18,437 \\
+ECDSA-P256 & openssl & Verify & 32 & 8,962 \\
+ECDSA-P256 & openssl & Verify & 1024 & 8,470 \\
+ECDSA-P384 & openssl & KeyGen & 0 & 630 \\
+ECDSA-P384 & openssl & Sign & 32 & 591 \\
+ECDSA-P384 & openssl & Sign & 1024 & 598 \\
+ECDSA-P384 & openssl & Verify & 32 & 653 \\
+ECDSA-P384 & openssl & Verify & 1024 & 770 \\
+Ed25519 & openssl & KeyGen & 0 & 14,009 \\
+Ed25519 & openssl & Sign & 32 & 15,991 \\
+Ed25519 & openssl & Sign & 1024 & 14,568 \\
+Ed25519 & openssl & Verify & 32 & 5,847 \\
+Ed25519 & openssl & Verify & 1024 & 5,719 \\
+ML-DSA-44 & openssl & KeyGen & 0 & 4,384 \\
+ML-DSA-44 & openssl & Sign & 32 & 813 \\
+ML-DSA-44 & openssl & Sign & 1024 & 808 \\
+ML-DSA-44 & openssl & Verify & 32 & 3,632 \\
+ML-DSA-44 & openssl & Verify & 1024 & 4,363 \\
+ML-DSA-65 & openssl & KeyGen & 0 & 2,709 \\
+ML-DSA-65 & openssl & Sign & 32 & 560 \\
+ML-DSA-65 & openssl & Sign & 1024 & 545 \\
+ML-DSA-65 & openssl & Verify & 32 & 3,031 \\
+ML-DSA-65 & openssl & Verify & 1024 & 2,572 \\
+ML-DSA-87 & openssl & KeyGen & 0 & 1,729 \\
+ML-DSA-87 & openssl & Sign & 32 & 447 \\
+ML-DSA-87 & openssl & Sign & 1024 & 460 \\
+ML-DSA-87 & openssl & Verify & 32 & 1,857 \\
+ML-DSA-87 & openssl & Verify & 1024 & 1,707 \\
+ML-KEM-1024 & openssl & Decaps & 0 & 6,420 \\
+ML-KEM-1024 & openssl & Encaps & 0 & 9,354 \\
+ML-KEM-1024 & openssl & KeyGen & 0 & 2,065 \\
+ML-KEM-512 & pqcrypto & Decaps & 0 & 8,959 \\
+ML-KEM-512 & pqcrypto & Encaps & 0 & 11,985 \\
+ML-KEM-512 & pqcrypto & KeyGen & 0 & 14,284 \\
+ML-KEM-768 & openssl & Decaps & 0 & 8,301 \\
+ML-KEM-768 & openssl & Encaps & 0 & 9,972 \\
+ML-KEM-768 & openssl & KeyGen & 0 & 2,713 \\
+RSA-2048-OAEP & openssl & Decaps & 0 & 1,066 \\
+RSA-2048-OAEP & openssl & Encaps & 0 & 19,530 \\
+RSA-2048-OAEP & openssl & KeyGen & 0 & 13 \\
+RSA-2048-PSS & openssl & KeyGen & 0 & 13 \\
+RSA-2048-PSS & openssl & Sign & 32 & 1,117 \\
+RSA-2048-PSS & openssl & Sign & 1024 & 1,111 \\
+RSA-2048-PSS & openssl & Verify & 32 & 21,037 \\
+RSA-2048-PSS & openssl & Verify & 1024 & 19,023 \\
+RSA-3072-OAEP & openssl & Decaps & 0 & 293 \\
+RSA-3072-OAEP & openssl & Encaps & 0 & 12,307 \\
+RSA-3072-OAEP & openssl & KeyGen & 0 & 4 \\
+RSA-3072-PSS & openssl & KeyGen & 0 & 4 \\
+RSA-3072-PSS & openssl & Sign & 32 & 397 \\
+RSA-3072-PSS & openssl & Sign & 1024 & 394 \\
+RSA-3072-PSS & openssl & Verify & 32 & 13,517 \\
+RSA-3072-PSS & openssl & Verify & 1024 & 12,566 \\
+X25519 & openssl & Decaps & 0 & 11,814 \\
+X25519 & openssl & Encaps & 0 & 4,922 \\
+X25519 & openssl & KeyGen & 0 & 8,941 \\
+\bottomrule
+\end{tabular}
+\end{table}

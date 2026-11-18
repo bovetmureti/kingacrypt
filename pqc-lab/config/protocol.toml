@@ -1,0 +1,99 @@
+# =============================================================================
+# KC-LAB-PQC-2026-v1 — frozen laboratory protocol
+#
+# This file IS the protocol. `kclab freeze` writes its SHA-256 to protocol.lock.
+# `kclab run` only writes to data/raw/ when the hash of this file matches the
+# lock; any other run is diverted to sandbox/ (paper §4.4, "freeze compliance").
+# Change anything here => dated amendment => re-freeze.
+# =============================================================================
+
+[protocol]
+id = "KC-LAB-PQC-2026-v1"
+title = "Harvest-Now Threats and Post-Quantum Readiness — laboratory protocol"
+amendments = []   # e.g. [{date = "2026-12-01", note = "N=100 for RSA keygen"}]
+
+[run]
+warmup = 50          # W  (eq. 5)
+iterations = 1000    # N  (eq. 5)
+repetitions = 5      # R  (eq. 5) — each repetition is a fresh OS process
+percentile = 95      # p-hat_95 (eq. 8)
+correctness_trials = 25   # functional round-trips per algorithm before timing; must be 100 %
+message_lengths = [32, 1024]   # bytes, signature workloads (§4.4 item 4)
+pin_cpu = -1         # >=0 pins the worker to that logical core (taskset analogue)
+
+# Operations whose N is reduced to 100 because they are prohibitively slow
+# (§4.2: "N = 100 only if ... justified on the config sheet").
+[run.reduced_n]
+# Warm-up is also reduced for these, so one repetition stays under ~3 minutes.
+"RSA-2048-OAEP:KeyGen" = { n = 100, warmup = 5, reason = "probabilistic prime search, ~50-200 ms/op" }
+"RSA-3072-OAEP:KeyGen" = { n = 100, warmup = 5, reason = "probabilistic prime search, ~0.3-1.5 s/op" }
+"RSA-2048-PSS:KeyGen"  = { n = 100, warmup = 5, reason = "probabilistic prime search, ~50-200 ms/op" }
+"RSA-3072-PSS:KeyGen"  = { n = 100, warmup = 5, reason = "probabilistic prime search, ~0.3-1.5 s/op" }
+
+# -----------------------------------------------------------------------------
+# Implementations under test (IUT). Exactly one primary PQC IUT and one
+# classical library (§4.4 item 3). Secondary IUTs are cross-checks only and are
+# reported in a separate table, never mixed into T1–T5.
+# -----------------------------------------------------------------------------
+#
+# Choice (2026-11-18 build): OpenSSL is primary for PQC *and* classical, so
+# every T1-T5 row shares one library, one build, one set of compiler flags.
+# pyca/cryptography does not expose ML-KEM-512, so that single row falls back
+# to pqcrypto; analysis flags it in the `iut` column and the paper must
+# footnote it. On Linux, setting pqc_primary = "oqs" (liboqs) covers all six
+# parameter sets from one IUT, which is the protocol's stated preference.
+# Pilot note: pqcrypto 1.0.0 ML-DSA Sign measured ~13x slower than OpenSSL
+# on the dev machine, which is why it is a cross-check, not the primary.
+[iut]
+pqc_primary = "openssl"
+pqc_secondary = ["pqcrypto"]
+classical = "openssl"
+
+[iut.fallback]                  # algorithm -> backend, only when primary lacks it
+"ML-KEM-512" = "pqcrypto"
+
+[algorithms]
+kem_pqc = ["ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"]
+sig_pqc = ["ML-DSA-44", "ML-DSA-65", "ML-DSA-87"]
+kem_classical = ["X25519", "ECDH-P256", "ECDH-P384", "RSA-2048-OAEP", "RSA-3072-OAEP"]
+sig_classical = ["Ed25519", "ECDSA-P256", "ECDSA-P384", "RSA-2048-PSS", "RSA-3072-PSS"]
+
+# -----------------------------------------------------------------------------
+# Paired use-cases for the overhead ratio rho_u (eq. 11, metric M9).
+# Each pairs one PQC configuration with the classical configuration it would
+# replace at a comparable NIST security category.
+# -----------------------------------------------------------------------------
+[[use_case]]
+id = "U1"
+name = "Key establishment (TLS-style ephemeral exchange)"
+pqc = "ML-KEM-768"
+classical = "X25519"
+latency_ops = ["KeyGen", "Encaps", "Decaps"]     # summed client+server work
+size_objects = ["public_key", "ciphertext"]      # bytes on the wire
+
+[[use_case]]
+id = "U2"
+name = "Document / transaction signing (1 KiB message)"
+pqc = "ML-DSA-65"
+classical = "ECDSA-P256"
+latency_ops = ["Sign", "Verify"]
+message_length = 1024
+size_objects = ["signature"]
+
+[[use_case]]
+id = "U3"
+name = "Certificate-style authentication (public key + signature carried)"
+pqc = "ML-DSA-44"
+classical = "RSA-2048-PSS"
+latency_ops = ["Verify"]
+message_length = 32
+size_objects = ["public_key", "signature"]
+
+# -----------------------------------------------------------------------------
+# Default operator caps for the PQRA D4 technical gate (eq. 4). Operators
+# override these in their assessment file; these are placeholders, not norms.
+# -----------------------------------------------------------------------------
+[d4_gate_defaults]
+kem = "ML-KEM-768"
+latency_cap_us = 1000.0      # L*  median Encaps latency, microseconds
+ciphertext_cap_bytes = 1500  # C*  e.g. must fit one Ethernet MTU with headers

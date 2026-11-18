@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PQRA Readiness Assessment</title>
+<meta name="description" content="Post-Quantum Readiness Assessment (PQRA): score six dimensions, get a readiness band and a phased migration roadmap. Runs entirely in the browser." />
+<style>
+  :root {
+    --ink: #1b1914; --ink-soft: #4a443a; --paper: #f3eee4; --card: #fffdf8; --rule: #cfc4b0;
+    --accent: #7c3c1f; --accent-soft: #f1e2d6; --forest: #24362c; --bar: #2a78d6; --bar-track: #e7dfd0;
+    --warn-bg: #fbe9e4; --warn-ink: #8a2a1f;
+    --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif; --mono: "IBM Plex Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #f0ece4; --ink-soft: #c3bdb1; --paper: #1a1916; --card: #24221e; --rule: #47423a;
+      --accent: #e39a72; --accent-soft: #3a2a20; --forest: #9cc5ad; --bar: #3987e5; --bar-track: #3a3731;
+      --warn-bg: #3c211c; --warn-ink: #f2a593;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #f0ece4; --ink-soft: #c3bdb1; --paper: #1a1916; --card: #24221e; --rule: #47423a;
+    --accent: #e39a72; --accent-soft: #3a2a20; --forest: #9cc5ad; --bar: #3987e5; --bar-track: #3a3731;
+    --warn-bg: #3c211c; --warn-ink: #f2a593;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--sans); }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 24px 16px 64px; }
+  header h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 4px; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--ink-soft); max-width: 70ch; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; margin-top: 24px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .summary { position: static !important; } }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; margin-bottom: 16px; }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  label.f { display: flex; flex-direction: column; font-size: 0.85rem; color: var(--ink-soft); gap: 3px; }
+  input[type=text], input[type=number], input[type=date] {
+    font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+  details.dim { padding: 0; }
+  details.dim > summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; gap: 12px; align-items: baseline; }
+  details.dim > summary::-webkit-details-marker { display: none; }
+  .dim-id { font-family: var(--mono); color: var(--accent); font-weight: 600; }
+  .dim-name { font-weight: 600; flex: 1; }
+  .dim-score { font-family: var(--mono); color: var(--ink-soft); }
+  .dim-body { padding: 0 18px 12px; }
+  .dim-def { color: var(--ink-soft); margin: 0 0 8px; font-size: 0.93rem; }
+  .ind { border-top: 1px solid var(--rule); padding: 12px 0; }
+  .ind-text { margin: 0 0 8px; }
+  .ind-text b { font-family: var(--mono); font-weight: 600; margin-right: 6px; }
+  .opts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  @media (max-width: 640px) { .opts { grid-template-columns: 1fr 1fr; } }
+  .opts label { border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; font-size: 0.82rem; cursor: pointer; line-height: 1.3; }
+  .opts input { position: absolute; opacity: 0; pointer-events: none; }
+  .opts label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .opts label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opts .n { font-family: var(--mono); font-weight: 600; display: block; }
+  .ev { width: 100%; margin-top: 6px; }
+  .summary { position: sticky; top: 16px; }
+  .big { font-size: 2.4rem; font-weight: 600; font-family: var(--mono); line-height: 1; }
+  .band { display: inline-block; margin-top: 6px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--ink-soft); font-weight: 600; }
+  .bars { margin-top: 14px; display: grid; gap: 6px; }
+  .bar-row { display: grid; grid-template-columns: 34px 1fr 40px; gap: 8px; align-items: center; font-size: 0.85rem; }
+  .bar-track { height: 10px; background: var(--bar-track); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+  .bar-row span:last-child { font-family: var(--mono); text-align: right; }
+  .warn { background: var(--warn-bg); color: var(--warn-ink); border-radius: 6px; padding: 8px 10px; font-size: 0.9rem; margin-top: 10px; }
+  .muted { color: var(--ink-soft); font-size: 0.88rem; }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  button, .btn { font: inherit; font-size: 0.9rem; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--card); }
+  ol.steps { padding-left: 1.2em; margin: 6px 0 0; font-size: 0.9rem; }
+  ol.steps li { margin-bottom: 6px; }
+  h2 { font-size: 1.1rem; margin: 0 0 8px; }
+  code { font-family: var(--mono); font-size: 0.88em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Post-Quantum Readiness Assessment</h1>
+    <p>Score 24 indicators across six dimensions (0 = none … 3 = managed, or N/A). The page computes each dimension score
+      S<sub>d</sub>, overall readiness R, the band, and where to start the migration. Nothing leaves your browser;
+      export the JSON to score it with lab evidence in <code>kclab pqra score</code>.</p>
+  </header>
+
+  <div class="layout">
+    <main>
+      <section class="card">
+        <h2>Estate</h2>
+        <div class="meta">
+          <label class="f">Organisation / estate label<input type="text" id="org-label" placeholder="e.g. Retail bank, digital channels" /></label>
+          <label class="f">Sector<input type="text" id="org-sector" placeholder="Banking, telecom, government…" /></label>
+          <label class="f">Rater role<input type="text" id="org-role" placeholder="CISO, PKI owner…" /></label>
+          <label class="f">Date<input type="date" id="org-date" /></label>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Harvest-now exposure (Mosca)</h2>
+        <p class="muted" style="margin-top:0">If the years your data must stay secret (x), plus the years migration will take (y), exceed your assumed years until a cryptographically relevant quantum computer (z), that data is already exposed to harvest-now, decrypt-later.</p>
+        <div class="meta">
+          <label class="f">x: confidentiality shelf-life (years)<input type="number" min="0" step="1" id="m-x" /></label>
+          <label class="f">y: migration time (years)<input type="number" min="0" step="1" id="m-y" /></label>
+          <label class="f">z: CRQC planning horizon (years)<input type="number" min="0" step="1" id="m-z" /></label>
+        </div>
+      </section>
+      <div id="dims"></div>
+    </main>
+
+    <aside class="summary">
+      <section class="card" aria-live="polite">
+        <div class="muted">Overall readiness R (0–3)</div>
+        <div class="big" id="R">–</div>
+        <div class="band" id="band">incomplete</div>
+        <div class="muted" id="progress" style="margin-top:6px"></div>
+        <div class="bars" id="bars"></div>
+        <div id="mosca"></div>
+      </section>
+      <section class="card">
+        <h2>Where to start</h2>
+        <div id="start" class="muted">Score every dimension to see the starting phase.</div>
+        <ol class="steps" id="steps"></ol>
+      </section>
+      <section class="card">
+        <div class="btns">
+          <button class="primary" id="export">Export JSON</button>
+          <label class="btn">Import JSON<input type="file" id="import" accept="application/json" hidden /></label>
+          <button id="reset">Clear</button>
+        </div>
+        <p class="muted" style="margin-bottom:0">Draft instrument <span id="ver"></span>. Indicators are under expert review.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script src="pqra.js"></script>
+<script>
+(function () {
+  const START = {
+    Critical: ["P0 Mobilise", "Name an owner, record harvest-now risk in the risk register, then build the inventory. Buying PQC products before the inventory exists usually moves risk around without reducing it."],
+    Developing: ["P1 Discover", "Finish the inventory and exposure mapping, then pilot hybrid key exchange (e.g. X25519MLKEM768) on one high-exposure flow."],
+    Managed: ["P3 Hybrid pilots → production", "Move key-exchange pilots to production; plan the slower PKI and signature migration."],
+    Optimising: ["P4 Scale & agility", "Keep algorithm rotation exercised, track the NIST IR 8547 deprecation dates (2030 / 2035) and complete signature migration."]
+  };
+  const KEY = "pqra-draft-v1";
+  let inst = null;
+  const state = { organisation: {}, scores: {}, evidence: {}, na_justification: {}, mosca: {} };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function load() { try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) Object.assign(state, s); } catch (e) {} }
+
+  function renderForm() {
+    const host = $("dims");
+    host.innerHTML = inst.dimensions.map((d, di) => `
+      <details class="card dim" ${di === 0 ? "open" : ""}>
+        <summary><span class="dim-id">${d.id}</span><span class="dim-name">${esc(d.name)}</span><span class="dim-score" id="s-${d.id}">–</span></summary>
+        <div class="dim-body">
+          <p class="dim-def">${esc(d.definition)}</p>
+          ${d.indicators.map((ind) => `
+            <div class="ind">
+              <p class="ind-text"><b>${ind.id}</b>${esc(ind.text)}</p>
+              <div class="opts" role="radiogroup" aria-label="${ind.id} score">
+                ${ind.anchors.map((a, v) => `<label><input type="radio" name="${ind.id}" value="${v}"><span class="n">${v}</span>${esc(a)}</label>`).join("")}
+                <label><input type="radio" name="${ind.id}" value="na"><span class="n">N/A</span>Not applicable</label>
+              </div>
+              <input type="text" class="ev" data-ev="${ind.id}" placeholder="Evidence pointer: ${esc(ind.evidence)}" />
+            </div>`).join("")}
+        </div>
+      </details>`).join("");
+  }
+
+  function fillForm() {
+    for (const [id, v] of Object.entries(state.scores)) {
+      const val = v === null ? "na" : String(v);
+      const el = document.querySelector(`input[name="${id}"][value="${val}"]`);
+      if (el) el.checked = true;
+    }
+    document.querySelectorAll("[data-ev]").forEach((el) => { el.value = state.evidence[el.dataset.ev] || ""; });
+    const o = state.organisation || {};
+    $("org-label").value = o.label || ""; $("org-sector").value = o.sector || "";
+    $("org-role").value = o.rater_role || ""; $("org-date").value = o.date || "";
+    const m = state.mosca || {};
+    $("m-x").value = m.shelf_life_years ?? ""; $("m-y").value = m.migration_years ?? ""; $("m-z").value = m.crqc_horizon_years ?? "";
+  }
+
+  function update() {
+    const r = PQRA.score(state, inst);
+    const total = inst.dimensions.reduce((n, d) => n + d.indicators.length, 0);
+    const done = Object.keys(state.scores).length;
+    $("progress").textContent = `${done} of ${total} indicators answered`;
+    $("R").textContent = r.R === null ? "–" : r.R.toFixed(2);
+    $("band").textContent = r.band || "incomplete";
+    $("bars").innerHTML = r.dimensions.map((d) => `
+      <div class="bar-row" title="${esc(d.name)}: m_d=${d.m}, N/A=${d.na}">
+        <span>${d.id}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${d.S === null ? 0 : (d.S / 3) * 100}%"></div></div>
+        <span>${d.S === null ? "–" : d.S.toFixed(2)}</span>
+      </div>`).join("");
+    r.dimensions.forEach((d) => { $("s-" + d.id).textContent = d.S === null ? "–" : d.S.toFixed(2) + " / 3"; });
+    $("mosca").innerHTML = r.mosca && r.mosca.exposed
+      ? `<div class="warn"><b>Harvest-now exposed:</b> x + y = ${r.mosca.x_plus_y} years exceeds z = ${r.mosca.z_horizon}. Put hybrid key exchange for long-lived data ahead of the band sequence.</div>`
+      : r.mosca ? `<p class="muted">Mosca: x + y = ${r.mosca.x_plus_y} ≤ z = ${r.mosca.z_horizon} (margin ${r.mosca.margin_years} years).</p>` : "";
+    if (r.band) {
+      const [ph, txt] = START[r.band];
+      $("start").innerHTML = `<b>${ph}.</b> ${esc(txt)}`;
+    } else {
+      $("start").textContent = "Score every dimension to see the starting phase.";
+    }
+    // next steps: lowest-scored indicators in dimensions under 2.0, next anchor up
+    const steps = [];
+    for (const d of r.dimensions.filter((x) => x.S !== null && x.S < 2).sort((a, b) => a.S - b.S)) {
+      const dd = inst.dimensions.find((x) => x.id === d.id);
+      const weak = dd.indicators.filter((i) => typeof state.scores[i.id] === "number" && state.scores[i.id] < 3)
+        .sort((a, b) => state.scores[a.id] - state.scores[b.id]).slice(0, 2);
+      for (const i of weak) steps.push(`<li><b>${i.id}</b> ${state.scores[i.id]} → ${state.scores[i.id] + 1}: ${esc(i.anchors[state.scores[i.id] + 1])}</li>`);
+    }
+    $("steps").innerHTML = steps.slice(0, 6).join("");
+    save();
+  }
+
+  function bind() {
+    $("dims").addEventListener("change", (e) => {
+      const t = e.target;
+      if (t.type === "radio") { state.scores[t.name] = t.value === "na" ? null : Number(t.value); update(); }
+    });
+    $("dims").addEventListener("input", (e) => {
+      const t = e.target;
+      if (t.dataset.ev) {
+        state.evidence[t.dataset.ev] = t.value;
+        if (state.scores[t.dataset.ev] === null) state.na_justification[t.dataset.ev] = t.value;
+        save();
+      }
+    });
+    const org = { "org-label": "label", "org-sector": "sector", "org-role": "rater_role", "org-date": "date" };
+    for (const [id, k] of Object.entries(org)) $(id).addEventListener("input", (e) => { state.organisation[k] = e.target.value; save(); });
+    const mos = { "m-x": "shelf_life_years", "m-y": "migration_years", "m-z": "crqc_horizon_years" };
+    for (const [id, k] of Object.entries(mos)) $(id).addEventListener("input", (e) => {
+      state.mosca[k] = e.target.value === "" ? null : Number(e.target.value); update();
+    });
+    $("export").addEventListener("click", () => {
+      const out = Object.assign({ instrument: `${inst.id} ${inst.version}` }, state);
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `pqra-${(state.organisation.label || "assessment").replace(/\W+/g, "-").toLowerCase()}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+    $("import").addEventListener("change", async (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      try {
+        const data = JSON.parse(await f.text());
+        Object.assign(state, { organisation: {}, scores: {}, evidence: {}, na_justification: {}, mosca: {} }, data);
+        for (const k of Object.keys(state.scores)) if (state.scores[k] === undefined || state.scores[k] === "") delete state.scores[k];
+        document.querySelectorAll("input[type=radio]").forEach((r) => (r.checked = false));
+        fillForm(); update();
+      } catch (err) { alert("Could not read that file: " + err.message); }
+    });
+    $("reset").addEventListener("click", () => {
+      if (!confirm("Clear all answers?")) return;
+      Object.assign(state, { organisation: {}, scores: {}, evidence: {}, na_justification: {}, mosca: {} });
+      document.querySelectorAll("input[type=radio]").forEach((r) => (r.checked = false));
+      fillForm(); update();
+    });
+  }
+
+  fetch("instrument.json").then((r) => r.json()).then((j) => {
+    inst = j;
+    $("ver").textContent = j.version;
+    // drop answers that are not real indicators (e.g. a template with nulls for unanswered)
+    load();
+    renderForm(); fillForm(); bind(); update();
+  }).catch(() => {
+    $("dims").innerHTML = '<div class="card warn">Could not load instrument.json. Serve this folder over HTTP (<code>python -m kclab web</code>) instead of opening the file directly.</div>';
+  });
+})();
+</script>
+</body>
+</html>

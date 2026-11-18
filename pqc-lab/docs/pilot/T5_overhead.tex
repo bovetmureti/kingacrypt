@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\caption{M9 overhead ratios $\rho_u$ (Protocol KC-LAB-PQC-2026-v1, session 20261118T092240Z-sandbox).}
+\label{tab:t5}
+\small
+\begin{tabular}{@{}lllllrrr@{}}
+\toprule
+use\_case & pqc & classical & metric & unit & M\_pqc & M\_classical & rho \\
+\midrule
+U1 & ML-KEM-768 & X25519 & latency (sum of median) & us & 481.6 & 260.1 & 1.85 \\
+U1 & ML-KEM-768 & X25519 & bytes on wire & B & 2,272.0 & 64.0 & 35.50 \\
+U1 & ML-KEM-768 & X25519 & incremental peak RSS & KiB & 484.0 & 640.0 & 0.76 \\
+U2 & ML-DSA-65 & ECDSA-P256 & latency (sum of median) & us & 1,743.7 & 138.5 & 12.59 \\
+U2 & ML-DSA-65 & ECDSA-P256 & bytes on wire & B & 3,309.0 & 72.0 & 45.96 \\
+U2 & ML-DSA-65 & ECDSA-P256 & incremental peak RSS & KiB & 1,315.2 & 1,979.2 & 0.66 \\
+U3 & ML-DSA-44 & RSA-2048-PSS & latency (sum of median) & us & 208.2 & 39.1 & 5.32 \\
+U3 & ML-DSA-44 & RSA-2048-PSS & bytes on wire & B & 3,732.0 & 526.0 & 7.10 \\
+U3 & ML-DSA-44 & RSA-2048-PSS & incremental peak RSS & KiB & 1,238.4 & 1,780.0 & 0.70 \\
+\bottomrule
+\end{tabular}
+\end{table}

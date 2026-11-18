@@ -1,0 +1,148 @@
+{
+  "id": "PQRA",
+  "version": "0.1.0-draft",
+  "status": "Draft indicator set for expert review (Phase B). Wording and anchors are expected to change after review; the dimension structure and scoring equations follow the working paper.",
+  "scale": {
+    "0": "None: no evidence the practice exists",
+    "1": "Nascent: ad hoc, person-dependent, or planned only",
+    "2": "Partial: documented and in use for some critical services",
+    "3": "Managed: documented, owned, covering all critical services, reviewed on a schedule"
+  },
+  "not_applicable": "Use null with a justification; N/A indicators are excluded from m_d in equation (1).",
+  "bands": [
+    {"label": "Critical", "min": 0.0, "max": 1.0, "max_inclusive": false},
+    {"label": "Developing", "min": 1.0, "max": 2.0, "max_inclusive": false},
+    {"label": "Managed", "min": 2.0, "max": 2.5, "max_inclusive": false},
+    {"label": "Optimising", "min": 2.5, "max": 3.0, "max_inclusive": true}
+  ],
+  "dimensions": [
+    {
+      "id": "D1",
+      "name": "Crypto inventory & dependency map",
+      "definition": "Completeness of algorithm, key, certificate, and library inventory across critical services.",
+      "feeds": ["RQ1", "RQ2"],
+      "indicators": [
+        {"id": "D1.1", "text": "An inventory lists where public-key cryptography is used in each critical service (TLS endpoints, VPN, PKI, code signing, HSM-backed keys, payment messaging, database encryption).",
+         "anchors": ["No inventory", "Partial list kept by individuals", "Documented inventory for some critical services", "Complete, owned inventory refreshed at least annually"],
+         "evidence": "Inventory extract (redacted), owner, last refresh date"},
+        {"id": "D1.2", "text": "For each use, the algorithm, key size, and protocol version are recorded (e.g. RSA-2048, ECDSA P-256, TLS 1.2).",
+         "anchors": ["Not recorded", "Recorded for a few systems", "Recorded for most critical systems", "Recorded for all, machine-readable"],
+         "evidence": "Sample rows of the inventory"},
+        {"id": "D1.3", "text": "Third-party and embedded cryptography (vendor appliances, core banking, mobile SDKs, card/POS, HSM firmware) is included with vendor and version.",
+         "anchors": ["Excluded", "Known informally", "Main vendors listed", "All vendors and versions tracked with contract owner"],
+         "evidence": "Vendor list with crypto components"},
+        {"id": "D1.4", "text": "Discovery is tool-assisted (network scanning, certificate transparency, code/dependency scanning, CBOM) rather than only interview-based.",
+         "anchors": ["Interviews only", "One-off scan", "Periodic scans of main estates", "Continuous discovery feeding the inventory"],
+         "evidence": "Tool name, scan scope and date"}
+      ]
+    },
+    {
+      "id": "D2",
+      "name": "HNDL exposure & data longevity",
+      "definition": "Classification of data/secrets by confidentiality lifetime vs. expected quantum-relevant horizon.",
+      "feeds": ["RQ1", "RQ4"],
+      "indicators": [
+        {"id": "D2.1", "text": "Data classes carry a required confidentiality lifetime (e.g. KYC records, health records, state secrets, long-term contracts).",
+         "anchors": ["No lifetime attribute", "Retention periods only", "Confidentiality lifetime for key data classes", "Lifetime set for all classes and linked to the crypto inventory"],
+         "evidence": "Classification policy section"},
+        {"id": "D2.2", "text": "Flows that carry long-lived data over public-key protected channels are identified (the harvest-now targets).",
+         "anchors": ["Not identified", "Known informally", "Identified for main flows", "Mapped for all flows, with traffic volumes"],
+         "evidence": "Flow map or list"},
+        {"id": "D2.3", "text": "The organisation has stated a planning assumption for when a cryptographically relevant quantum computer could exist, and uses it in decisions (Mosca: shelf-life + migration time vs. horizon).",
+         "anchors": ["No assumption", "Discussed informally", "Assumption documented", "Assumption documented, reviewed annually, and drives prioritisation"],
+         "evidence": "Risk register entry"},
+        {"id": "D2.4", "text": "HNDL is recorded as a risk in the enterprise or ICT risk register with an owner and treatment.",
+         "anchors": ["Not recorded", "Mentioned", "Recorded with owner", "Recorded, treated, and reported to the board/risk committee"],
+         "evidence": "Risk register ID"}
+      ]
+    },
+    {
+      "id": "D3",
+      "name": "Crypto-agility & hybrid readiness",
+      "definition": "Ability to swap algorithms, run hybrid handshakes, and avoid hard-coded classical suites.",
+      "feeds": ["RQ2", "RQ4"],
+      "indicators": [
+        {"id": "D3.1", "text": "Algorithms and parameters are set through configuration or a crypto service/library abstraction, not hard-coded in applications.",
+         "anchors": ["Hard-coded widely", "Configurable in a few systems", "Configurable in most critical systems", "Central crypto policy/service enforced"],
+         "evidence": "Architecture note or code standard"},
+        {"id": "D3.2", "text": "Critical TLS/VPN stacks can negotiate hybrid key exchange (e.g. X25519MLKEM768) or have a dated upgrade path to it.",
+         "anchors": ["No", "Under evaluation", "Supported on some endpoints", "Enabled on internet-facing critical endpoints"],
+         "evidence": "Stack versions, test results"},
+        {"id": "D3.3", "text": "PKI and HSMs can issue, store, and use PQC or composite keys/certificates (vendor-confirmed or tested).",
+         "anchors": ["Unknown", "Vendor roadmap only", "Tested in lab", "Available in production PKI/HSM"],
+         "evidence": "Vendor statement or test record"},
+        {"id": "D3.4", "text": "There is a tested procedure to rotate algorithms and keys across a service within a defined time.",
+         "anchors": ["None", "Done once, undocumented", "Documented procedure", "Exercised regularly with measured time-to-rotate"],
+         "evidence": "Runbook, last exercise date"}
+      ]
+    },
+    {
+      "id": "D4",
+      "name": "Technical performance envelope",
+      "definition": "Whether PQC object sizes and latencies fit operational SLOs (informed by lab M1-M9).",
+      "feeds": ["RQ3"],
+      "lab_gate": true,
+      "indicators": [
+        {"id": "D4.1", "text": "Latency and size budgets (SLOs) are known for the critical protocols: handshake time, message size limits, MTU, certificate chain size, smart-card/HSM storage.",
+         "anchors": ["Unknown", "Known for one protocol", "Known for most critical protocols", "Documented for all, with headroom calculated"],
+         "evidence": "SLO document"},
+        {"id": "D4.2", "text": "PQC performance has been measured on the organisation's own or representative hardware (e.g. with the KC-LAB-PQC harness) rather than taken from vendor claims.",
+         "anchors": ["No data", "Vendor/literature figures only", "Measured in a lab", "Measured on production-representative hardware, results on file"],
+         "evidence": "Benchmark session ID / report"},
+        {"id": "D4.3", "text": "Constrained endpoints are identified and assessed (POS terminals, USSD/SMS gateways, smart meters, IoT, low-bandwidth branches).",
+         "anchors": ["Not identified", "Known informally", "Listed with constraints", "Listed with a PQC fit/no-fit decision per class"],
+         "evidence": "Endpoint class list"},
+        {"id": "D4.4", "text": "Middleboxes and network paths are tested for larger handshakes (fragmentation, ClientHello over one packet, firewall/IDS/load-balancer behaviour).",
+         "anchors": ["Not tested", "Known issue reports only", "Tested on main paths", "Tested on all critical paths, issues tracked"],
+         "evidence": "Test record"}
+      ]
+    },
+    {
+      "id": "D5",
+      "name": "Governance, skills & vendor path",
+      "definition": "Board/CISO ownership, staff competence, procurement clauses, and vendor PQC roadmaps.",
+      "feeds": ["RQ1", "RQ4"],
+      "indicators": [
+        {"id": "D5.1", "text": "A named executive owns the quantum-safe transition and reports progress to the board or risk committee.",
+         "anchors": ["No owner", "Informal interest", "Named owner", "Named owner with periodic board reporting"],
+         "evidence": "Mandate or minutes reference"},
+        {"id": "D5.2", "text": "Staff responsible for PKI, networks, and development have PQC training appropriate to their role.",
+         "anchors": ["None", "Self-study by individuals", "Training for core team", "Role-based programme with refresh"],
+         "evidence": "Training records"},
+        {"id": "D5.3", "text": "Procurement and contracts require vendors to state PQC support and a migration timeline (FIPS 203/204/205).",
+         "anchors": ["No clause", "Asked ad hoc", "Clause in new contracts", "Clause in new and renewed contracts, tracked"],
+         "evidence": "Template clause"},
+        {"id": "D5.4", "text": "Regulatory and sector expectations are tracked (e.g. CBK, CA Kenya, ODPC, national cybersecurity guidance; NIST IR 8547 deprecation dates for vendors).",
+         "anchors": ["Not tracked", "Aware", "Tracked with owner", "Tracked and mapped to the plan"],
+         "evidence": "Compliance register entry"}
+      ]
+    },
+    {
+      "id": "D6",
+      "name": "Migration programme maturity",
+      "definition": "Existence of phased plan, pilots, rollback, and monitoring for quantum-safe transition.",
+      "feeds": ["RQ4"],
+      "indicators": [
+        {"id": "D6.1", "text": "A phased migration plan exists with priorities derived from D1 inventory and D2 exposure.",
+         "anchors": ["None", "Intent stated", "Plan drafted", "Approved, funded plan with milestones"],
+         "evidence": "Plan document"},
+        {"id": "D6.2", "text": "At least one pilot (e.g. hybrid TLS on an internal service, PQC code signing in test) has been run and evaluated.",
+         "anchors": ["None", "Planned", "Pilot run", "Pilot evaluated and promoted to production"],
+         "evidence": "Pilot report"},
+        {"id": "D6.3", "text": "Rollback and interoperability fallback are defined for each migration step.",
+         "anchors": ["Not defined", "Assumed", "Defined for pilots", "Defined and tested for each step"],
+         "evidence": "Rollback plan"},
+        {"id": "D6.4", "text": "Progress is measured (share of critical flows on hybrid/PQC, inventory coverage) and reviewed.",
+         "anchors": ["Not measured", "Anecdotal", "Measured occasionally", "KPIs tracked and reviewed on a schedule"],
+         "evidence": "KPI dashboard"}
+      ]
+    }
+  ],
+  "references": [
+    "NIST FIPS 203 (ML-KEM), FIPS 204 (ML-DSA), FIPS 205 (SLH-DSA), August 2024",
+    "NIST IR 8547 (initial public draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+    "NIST SP 1800-38, Migration to Post-Quantum Cryptography (NCCoE practice guide)",
+    "CISA, NSA, NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography, August 2023",
+    "Mosca, M. Cybersecurity in an era with quantum computers: will we be ready? IEEE Security & Privacy 16(5), 2018"
+  ]
+}

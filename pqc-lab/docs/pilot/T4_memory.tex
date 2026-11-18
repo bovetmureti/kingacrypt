@@ -1,0 +1,28 @@
+\begin{table}[ht]
+\centering
+\caption{M8 peak and incremental RSS (Protocol KC-LAB-PQC-2026-v1, session 20261118T092240Z-sandbox).}
+\label{tab:t4}
+\small
+\begin{tabular}{@{}lllrrrr@{}}
+\toprule
+algorithm & iut & family & R & peak\_rss\_MiB & delta\_rss\_KiB & delta\_rss\_sd\_KiB \\
+\midrule
+ECDH-P256 & openssl & classical & 5 & 24.6 & 1,050 & 112 \\
+ECDH-P384 & openssl & classical & 5 & 24.4 & 1,046 & 102 \\
+ECDSA-P256 & openssl & classical & 5 & 25.4 & 1,979 & 203 \\
+ECDSA-P384 & openssl & classical & 5 & 25.3 & 1,922 & 23 \\
+Ed25519 & openssl & classical & 5 & 25.0 & 1,490 & 223 \\
+ML-DSA-44 & openssl & pqc & 5 & 25.2 & 1,238 & 85 \\
+ML-DSA-65 & openssl & pqc & 5 & 25.2 & 1,315 & 185 \\
+ML-DSA-87 & openssl & pqc & 5 & 25.4 & 1,352 & 100 \\
+ML-KEM-1024 & openssl & pqc & 5 & 24.6 & 778 & 147 \\
+ML-KEM-512 & pqcrypto & pqc & 5 & 23.8 & 3,021 & 46 \\
+ML-KEM-768 & openssl & pqc & 5 & 24.4 & 484 & 143 \\
+RSA-2048-OAEP & openssl & classical & 5 & 24.5 & 1,211 & 147 \\
+RSA-2048-PSS & openssl & classical & 5 & 25.2 & 1,780 & 130 \\
+RSA-3072-OAEP & openssl & classical & 5 & 24.7 & 1,322 & 99 \\
+RSA-3072-PSS & openssl & classical & 5 & 25.1 & 1,918 & 450 \\
+X25519 & openssl & classical & 5 & 24.4 & 640 & 124 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,1065 @@
+{
+  "session": "20261118T092240Z-sandbox",
+  "official": false,
+  "which": "primary",
+  "quick": false,
+  "protocol_id": "KC-LAB-PQC-2026-v1",
+  "protocol_sha256": "3f20c25a3507c6ca59380d400677cea7336c23025405b7b12163cc79785aae8b",
+  "protocol_frozen": false,
+  "protocol_lock": {},
+  "protocol_snapshot": {
+    "protocol": {
+      "id": "KC-LAB-PQC-2026-v1",
+      "title": "Harvest-Now Threats and Post-Quantum Readiness \u2014 laboratory protocol",
+      "amendments": []
+    },
+    "run": {
+      "warmup": 50,
+      "iterations": 1000,
+      "repetitions": 5,
+      "percentile": 95,
+      "correctness_trials": 25,
+      "message_lengths": [
+        32,
+        1024
+      ],
+      "pin_cpu": -1,
+      "reduced_n": {
+        "RSA-2048-OAEP:KeyGen": {
+          "n": 100,
+          "warmup": 5,
+          "reason": "probabilistic prime search, ~50-200 ms/op"
+        },
+        "RSA-3072-OAEP:KeyGen": {
+          "n": 100,
+          "warmup": 5,
+          "reason": "probabilistic prime search, ~0.3-1.5 s/op"
+        },
+        "RSA-2048-PSS:KeyGen": {
+          "n": 100,
+          "warmup": 5,
+          "reason": "probabilistic prime search, ~50-200 ms/op"
+        },
+        "RSA-3072-PSS:KeyGen": {
+          "n": 100,
+          "warmup": 5,
+          "reason": "probabilistic prime search, ~0.3-1.5 s/op"
+        }
+      }
+    },
+    "iut": {
+      "pqc_primary": "openssl",
+      "pqc_secondary": [
+        "pqcrypto"
+      ],
+      "classical": "openssl",
+      "fallback": {
+        "ML-KEM-512": "pqcrypto"
+      }
+    },
+    "algorithms": {
+      "kem_pqc": [
+        "ML-KEM-512",
+        "ML-KEM-768",
+        "ML-KEM-1024"
+      ],
+      "sig_pqc": [
+        "ML-DSA-44",
+        "ML-DSA-65",
+        "ML-DSA-87"
+      ],
+      "kem_classical": [
+        "X25519",
+        "ECDH-P256",
+        "ECDH-P384",
+        "RSA-2048-OAEP",
+        "RSA-3072-OAEP"
+      ],
+      "sig_classical": [
+        "Ed25519",
+        "ECDSA-P256",
+        "ECDSA-P384",
+        "RSA-2048-PSS",
+        "RSA-3072-PSS"
+      ]
+    },
+    "use_case": [
+      {
+        "id": "U1",
+        "name": "Key establishment (TLS-style ephemeral exchange)",
+        "pqc": "ML-KEM-768",
+        "classical": "X25519",
+        "latency_ops": [
+          "KeyGen",
+          "Encaps",
+          "Decaps"
+        ],
+        "size_objects": [
+          "public_key",
+          "ciphertext"
+        ]
+      },
+      {
+        "id": "U2",
+        "name": "Document / transaction signing (1 KiB message)",
+        "pqc": "ML-DSA-65",
+        "classical": "ECDSA-P256",
+        "latency_ops": [
+          "Sign",
+          "Verify"
+        ],
+        "message_length": 1024,
+        "size_objects": [
+          "signature"
+        ]
+      },
+      {
+        "id": "U3",
+        "name": "Certificate-style authentication (public key + signature carried)",
+        "pqc": "ML-DSA-44",
+        "classical": "RSA-2048-PSS",
+        "latency_ops": [
+          "Verify"
+        ],
+        "message_length": 32,
+        "size_objects": [
+          "public_key",
+          "signature"
+        ]
+      }
+    ],
+    "d4_gate_defaults": {
+      "kem": "ML-KEM-768",
+      "latency_cap_us": 1000.0,
+      "ciphertext_cap_bytes": 1500
+    }
+  },
+  "repetitions": 5,
+  "tasks": [
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 5,
+          "n": 100,
+          "reduced_reason": "probabilistic prime search, ~50-200 ms/op"
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 5,
+          "n": 100,
+          "reduced_reason": "probabilistic prime search, ~0.3-1.5 s/op"
+        },
+        "Encaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Decaps": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 5,
+          "n": 100,
+          "reduced_reason": "probabilistic prime search, ~50-200 ms/op"
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "plans": {
+        "KeyGen": {
+          "warmup": 5,
+          "n": 100,
+          "reduced_reason": "probabilistic prime search, ~0.3-1.5 s/op"
+        },
+        "Sign": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        },
+        "Verify": {
+          "warmup": 50,
+          "n": 1000,
+          "reduced_reason": null
+        }
+      }
+    }
+  ],
+  "environment": {
+    "cpu_model": "Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz",
+    "cpu_logical": 4,
+    "cpu_physical": 2,
+    "cpu_freq_mhz": {
+      "current": 798.0,
+      "max": 2496.0
+    },
+    "ram_bytes": 12745539584,
+    "os": "Windows-10-10.0.19045-SP0",
+    "machine": "AMD64",
+    "python": "3.14.3",
+    "python_impl": "CPython",
+    "python_compiler": "MSC v.1944 64 bit (AMD64)",
+    "on_ac_power": true,
+    "power_profile": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "iut_versions": {
+      "pqcrypto": "pqcrypto 1.0.0",
+      "openssl": "pyca/cryptography 50.0.2 / OpenSSL 4.0.3 29 Sep 2026",
+      "oqs": "unavailable (ModuleNotFoundError)"
+    },
+    "harness_commit": "66c44d7c0155c0e63dd5e1d0ba16a1e6ade63485",
+    "harness_tree_dirty": true,
+    "env_overrides": {}
+  },
+  "started_utc": "2026-11-18T09:22:40+00:00",
+  "results": [
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 0.83
+    },
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 0.71
+    },
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 0.69
+    },
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 0.68
+    },
+    {
+      "algorithm": "ML-KEM-512",
+      "backend": "pqcrypto",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 0.72
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 1.07
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 1.02
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 1.02
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 0.98
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 1.09
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 1.23
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 1.14
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 1.31
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 1.15
+    },
+    {
+      "algorithm": "ML-KEM-1024",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 1.17
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 3.84
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 3.89
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 4.04
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 3.69
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 3.94
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 5.68
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 5.58
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 5.49
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 5.57
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 5.53
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 6.84
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 6.56
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 6.66
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 6.8
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 8.89
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 1.27
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 0.68
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 0.63
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 0.95
+    },
+    {
+      "algorithm": "X25519",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 0.82
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 0.76
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 0.65
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 0.71
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 0.67
+    },
+    {
+      "algorithm": "ECDH-P256",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 0.67
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 7.26
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 16.11
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 16.7
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 8.96
+    },
+    {
+      "algorithm": "ECDH-P384",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 10.34
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 16.97
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 11.73
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 12.78
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 12.3
+    },
+    {
+      "algorithm": "RSA-2048-OAEP",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 12.38
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 51.01
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 44.06
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 46.13
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 45.68
+    },
+    {
+      "algorithm": "RSA-3072-OAEP",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 43.1
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 1.12
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 1.04
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 1.03
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 1.03
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 1.01
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 0.88
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 0.82
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 0.81
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 0.83
+    },
+    {
+      "algorithm": "ECDSA-P256",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 0.81
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 10.54
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 9.39
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 8.56
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 8.2
+    },
+    {
+      "algorithm": "ECDSA-P384",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 8.0
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 13.51
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 14.94
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 14.06
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 13.26
+    },
+    {
+      "algorithm": "RSA-2048-PSS",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 13.65
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "rep": 1,
+      "status": "ok",
+      "seconds": 49.27
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "rep": 2,
+      "status": "ok",
+      "seconds": 45.0
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "rep": 3,
+      "status": "ok",
+      "seconds": 50.96
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "rep": 4,
+      "status": "ok",
+      "seconds": 56.47
+    },
+    {
+      "algorithm": "RSA-3072-PSS",
+      "backend": "openssl",
+      "rep": 5,
+      "status": "ok",
+      "seconds": 42.09
+    }
+  ],
+  "finished_utc": "2026-11-18T09:36:29+00:00"
+}
